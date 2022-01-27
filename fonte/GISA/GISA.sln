@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31515.178
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gisa.mic.backend", "gisa.mic.backend\gisa.mic.backend.csproj", "{AB1354CF-B99B-4A06-A20E-1E33DF7B9DCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gisa.mic.backend", "gisa.mic.backend\gisa.mic.backend.csproj", "{AB1354CF-B99B-4A06-A20E-1E33DF7B9DCE}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gisa.mic.frontend", "gisa.mic.frontend\gisa.mic.frontend.vcxproj", "{796BA273-5FFE-49D4-92C4-BA7845DD616B}"
 EndProject
@@ -11,9 +11,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gisa.mge.frontend", "gisa.m
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gisa.msa.frontend", "gisa.msa.frontend\gisa.msa.frontend.vcxproj", "{D1B1144B-8CCE-4CBC-8AF3-98C15178BFCD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gisa.mge.backend", "gisa.mge.backend\gisa.mge.backend.csproj", "{FA3FD26A-28D7-480F-ADF0-6070E75456B6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gisa.mge.backend", "gisa.mge.backend\gisa.mge.backend.csproj", "{FA3FD26A-28D7-480F-ADF0-6070E75456B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "gisa.msa.backend", "gisa.msa.backend\gisa.msa.backend.csproj", "{043897E3-154A-4D3F-8ED5-D967A51D3974}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "gisa.msa.backend", "gisa.msa.backend\gisa.msa.backend.csproj", "{043897E3-154A-4D3F-8ED5-D967A51D3974}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gisa.comum", "Gisa.comum\Gisa.comum.csproj", "{28B91181-A7B7-4904-AB36-3F58F9FE4F61}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -91,6 +93,18 @@ Global
 		{043897E3-154A-4D3F-8ED5-D967A51D3974}.Release|x64.Build.0 = Release|Any CPU
 		{043897E3-154A-4D3F-8ED5-D967A51D3974}.Release|x86.ActiveCfg = Release|Any CPU
 		{043897E3-154A-4D3F-8ED5-D967A51D3974}.Release|x86.Build.0 = Release|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Debug|x64.Build.0 = Debug|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Debug|x86.Build.0 = Debug|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Release|x64.ActiveCfg = Release|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Release|x64.Build.0 = Release|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Release|x86.ActiveCfg = Release|Any CPU
+		{28B91181-A7B7-4904-AB36-3F58F9FE4F61}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
