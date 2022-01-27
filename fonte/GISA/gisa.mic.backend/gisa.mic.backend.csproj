@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gisa.comum\Gisa.comum.csproj" />
+    <ProjectReference Include="..\Gisa.comum\gisa.comum.csproj" />
   </ItemGroup>
 
 </Project>

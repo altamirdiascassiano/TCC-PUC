@@ -1,13 +1,12 @@
+using gisa.comum;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
+using Serilog;
 
 namespace gisa.msa.backend
 {
@@ -15,7 +14,8 @@ namespace gisa.msa.backend
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            Log.Logger = new AgenteLog().CriaAgente(configuration);
+            Log.Debug("Startup.cs -> Startup()");
         }
 
         public IConfiguration Configuration { get; }
@@ -23,25 +23,27 @@ namespace gisa.msa.backend
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRazorPages();
+
+            services.AddControllers();
+            services.AddLogging().AddLogging();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "gisa.msa.backend", Version = "v1" });
+            });
+            Log.Debug("Startup.cs -> ConfigurationService()");
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "gisa.msa.backend v1"));
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
             app.UseRouting();
 
@@ -49,8 +51,10 @@ namespace gisa.msa.backend
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
+            Log.Debug("Startup.cs -> Configure()");
+            Log.Information("gisa.msa.backend iniciado");
         }
     }
 }

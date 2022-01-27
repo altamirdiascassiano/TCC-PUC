@@ -2,7 +2,7 @@
 using Serilog;
 using System.IO;
 
-namespace Gisa.comum
+namespace gisa.comum
 {
     public class AgenteLog
     {
