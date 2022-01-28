@@ -20,6 +20,23 @@ namespace gisa.comum
             _firestoreDb = FirestoreDb.Create(projetoId);
         }
 
+        public async Task<T> BuscaDocumentoColecaoPorIdAsync<T>(string nomeColecao, string idDocumento)
+        {          
+            DocumentReference documentReference = _firestoreDb.Collection(nomeColecao).Document(idDocumento);
+            DocumentSnapshot documentSnapshot = await documentReference.GetSnapshotAsync();
+
+            if (documentSnapshot.Exists)
+            {
+                Dictionary<string, object> docRecuperado = documentSnapshot.ToDictionary();
+                docRecuperado.Add("Id", documentSnapshot.Id);
+                string json = JsonConvert.SerializeObject(docRecuperado);
+                T novoDoc = JsonConvert.DeserializeObject<T>(json);
+                return novoDoc;
+            }
+
+            return default(T);
+        }
+
         public async Task<List<T>> BuscaTodosDocumentosColecaoAsync<T>(string nomeColecao)
         {
             Query query = _firestoreDb.Collection(nomeColecao);

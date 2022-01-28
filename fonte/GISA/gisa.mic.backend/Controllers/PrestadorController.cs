@@ -1,10 +1,7 @@
 ﻿using gisa.comum;
 using gisa.mic.backend.Model;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Serilog;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,6 +16,7 @@ namespace gisa.mic.backend.Controllers
         {
             _agenteFireBaseStorage = new AgenteFireBaseStorage();
         }
+
         [HttpGet]
         public async Task<IEnumerable<Prestador>> Get()
         {           
@@ -30,18 +28,27 @@ namespace gisa.mic.backend.Controllers
             return documentos;
         }
 
-        [HttpPut]
-        public ActionResult Put(Prestador prestador)
+        [HttpGet]
+        [Route("/{id}")]
+        public async Task<Prestador> Get(string id)
         {
-            Log.Debug("PrestadorController.cs -> Put()");
+            Log.Debug("Iniciando consulta a base do Firebase no id " + id);
+            var documento = await _agenteFireBaseStorage.BuscaDocumentoColecaoPorIdAsync<Prestador>(nameof(Prestador), id);            
+            return documento;
+        }
+
+        [HttpPost]
+        public ActionResult Post(Prestador prestador)
+        {
+            Log.Debug("PrestadorController.cs -> Post()");
             _agenteFireBaseStorage.AdicionaDocumentoNaColecao<Prestador>(nameof(Prestador), prestador);
             return StatusCode(201);
         }
 
-        [HttpPost]
-        public ActionResult Post(string id,Prestador prestadorComAlteracao)
+        [HttpPut]
+        public ActionResult Put(string id,Prestador prestadorComAlteracao)
         {
-            Log.Debug("PrestadorController.cs -> Post()");
+            Log.Debug("PrestadorController.cs -> Put()");
             
             _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Prestador>(nameof(Prestador), id, prestadorComAlteracao);
             return StatusCode(200);
@@ -51,6 +58,7 @@ namespace gisa.mic.backend.Controllers
         public ActionResult Delete(string id)
         {
             Log.Debug("PrestadorController.cs -> Delete()");
+            Log.Information("Iniciado deleção do fornecedor " + id);
             _agenteFireBaseStorage.RemoveDocumentoNaColecao<Prestador>(nameof(Prestador), id);            
             return StatusCode(200);
         }
