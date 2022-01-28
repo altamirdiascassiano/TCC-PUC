@@ -1,9 +1,12 @@
-﻿using gisa.mic.backend.Model;
+﻿using gisa.comum;
+using gisa.mic.backend.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace gisa.mic.backend.Controllers
 {
@@ -12,8 +15,17 @@ namespace gisa.mic.backend.Controllers
     public class PrestadorController : Controller
     {        
         [HttpGet]
-        public IEnumerable<Prestador> Get()
+        public async Task<IEnumerable<Prestador>> GetAsync()
         {
+            var agenteFireBaseStorage = new AgenteFireBaseStorage();
+            var documentos= await agenteFireBaseStorage.BuscaTodosDadosColecaoAsync("prestador");
+            var prestadores = new List<Prestador>();
+
+            foreach (var documento in documentos)
+            {
+                prestadores.Add(JsonConvert.DeserializeObject<Prestador>(documento));
+            }            
+
             Log.Debug("PrestadorController.cs -> Get()");   
             var mock = new List<Prestador>() {
                 new Prestador() {
@@ -23,7 +35,7 @@ namespace gisa.mic.backend.Controllers
                     Id= Guid.NewGuid().ToString(), Nome = "Prestador Mock 2", Descricao = "Prestador dsc Mock 2", DtCadastro = DateTime.UtcNow
                 }
             };
-            return mock;
+            return prestadores;
         }
 
         [HttpPut]

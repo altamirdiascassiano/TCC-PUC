@@ -8,10 +8,6 @@ namespace gisa.comum
     {
         public ILogger CriaAgente(IConfiguration configuration)
         {
-            //Log.Logger = new LoggerConfiguration().CreateLogger();           
-            //return new LoggerConfiguration()
-            //.WriteTo.File(Path.Combine(pathLog,"log-.txt"), rollingInterval: RollingInterval.Day)
-            //.CreateLogger();
             return new LoggerConfiguration()
             .ReadFrom.Configuration(configuration)
             .CreateLogger();

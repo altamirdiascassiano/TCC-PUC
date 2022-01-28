@@ -35,3 +35,6 @@ msbuild.wrn
 
 #Logs
 *.log
+
+#Arquivos seguros
+gisa-c54d2-77dcdf90ba57.json
