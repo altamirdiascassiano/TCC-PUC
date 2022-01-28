@@ -39,36 +39,19 @@ namespace gisa.mic.backend.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(Prestador prestador)
+        public ActionResult Post(string id,Prestador prestadorComAlteracao)
         {
             Log.Debug("PrestadorController.cs -> Post()");
-            Prestador prestadorRecuperado = GetPrestadorDB(prestador.Id);
-            if(prestadorRecuperado != null)
-                //db.update(prestadorRecuperado, prestador)
-                return StatusCode(200);
-            //if prestador is not valid
-            // return bad request
-            // dbService.Save (prestador)
-            // eventBus.Add(prestador)
-
+            
+            _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Prestador>(nameof(Prestador), id, prestadorComAlteracao);
             return StatusCode(200);
-
-        }
-        private Prestador GetPrestadorDB(string id)
-        {
-            Log.Debug("PrestadorController.cs -> GetPrestadorDB()");
-            var prestadorMock = new Prestador() { Id = id, Nome = "Prestador Mock DB", Descricao = "DSC mock prestador db", DtCadastro = new DateTime(2022,01,01) }; //dbService busca pelo id
-            if(prestadorMock != null)
-                return prestadorMock;
-
-            return prestadorMock;
         }
 
         [HttpDelete]
-        public ActionResult Delete(Prestador prestador)
+        public ActionResult Delete(string id)
         {
             Log.Debug("PrestadorController.cs -> Delete()");
-            // delete db prestador
+            _agenteFireBaseStorage.RemoveDocumentoNaColecao<Prestador>(nameof(Prestador), id);            
             return StatusCode(200);
         }
     }

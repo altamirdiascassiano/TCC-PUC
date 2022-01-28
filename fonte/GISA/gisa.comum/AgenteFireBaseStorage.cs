@@ -21,10 +21,10 @@ namespace gisa.comum
         }
 
         public async Task<List<T>> BuscaTodosDocumentosColecaoAsync<T>(string nomeColecao)
-        {           
+        {
             Query query = _firestoreDb.Collection(nomeColecao);
             QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
-            List<T> listaDocumentos= new List<T>();
+            List<T> listaDocumentos = new List<T>();
 
             foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
             {
@@ -32,8 +32,9 @@ namespace gisa.comum
                 {
                     Dictionary<string, object> docDictionary = documentSnapshot.ToDictionary();
                     docDictionary.Add("Id", documentSnapshot.Id);
-                    docDictionary["DtCadastro"] = DateTime.Now.ToString(); //Tem resolver problema de conversão da data
-                    string json = JsonConvert.SerializeObject(docDictionary);                    
+                    //object obj = docDictionary["DtCadastro"];
+                    //docDictionary["DtCadastro"] = DateTime.Now.ToString(); //Tem resolver problema de conversão da data                    
+                    string json = JsonConvert.SerializeObject(docDictionary);
                     T novoDoc = JsonConvert.DeserializeObject<T>(json);
                     listaDocumentos.Add(novoDoc);
 
@@ -49,7 +50,36 @@ namespace gisa.comum
                 CollectionReference referenciaColecao = _firestoreDb.Collection(nomeColecao);
                 await referenciaColecao.AddAsync(documento);
                 return true;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> RemoveDocumentoNaColecao<T>(string nomeColecao, string idDocumento)
+        {
+            try
+            {
+                DocumentReference referenciaDocumento = _firestoreDb.Collection(nomeColecao).Document(idDocumento);
+                await referenciaDocumento.DeleteAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public async Task<bool> AtualizaDocumentoNaColecao<T>(string nomeColecao, string idDocumento, T EntidadeComAtualizacao)
+        {
+            try
+            {
+                DocumentReference referenciaDocumento = _firestoreDb.Collection(nomeColecao).Document(idDocumento);
+                await referenciaDocumento.SetAsync(EntidadeComAtualizacao, SetOptions.Overwrite);
+                return true;
+            }
+            catch (Exception ex)
             {
                 throw ex;
             }

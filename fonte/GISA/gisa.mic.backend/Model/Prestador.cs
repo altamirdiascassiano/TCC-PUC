@@ -8,8 +8,8 @@ namespace gisa.mic.backend.Model
     {
         public string Id{ get; set; }
 
-        [FirestoreProperty]
-        public DateTime DtCadastro { get; set; }
+        //[FirestoreProperty]
+        //public DateTime DtCadastro { get; set; }
 
         [FirestoreProperty]
         public string Nome { get; set; }
