@@ -13,42 +13,29 @@ namespace gisa.mic.backend.Controllers
     [ApiController]
     [Route("[controller]")]
     public class PrestadorController : Controller
-    {        
-        [HttpGet]
-        public async Task<IEnumerable<Prestador>> GetAsync()
+    {
+        AgenteFireBaseStorage _agenteFireBaseStorage;
+        public PrestadorController()
         {
-            var agenteFireBaseStorage = new AgenteFireBaseStorage();
-            var documentos= await agenteFireBaseStorage.BuscaTodosDadosColecaoAsync("prestador");
+            _agenteFireBaseStorage = new AgenteFireBaseStorage();
+        }
+        [HttpGet]
+        public async Task<IEnumerable<Prestador>> Get()
+        {           
+            Log.Debug("Iniciando consulta a base do Firebase");           
+            var documentos= await _agenteFireBaseStorage.BuscaTodosDocumentosColecaoAsync<Prestador>(nameof(Prestador));
+            Log.Debug("Consulta a base do Firebase finalizada");
             var prestadores = new List<Prestador>();
-
-            foreach (var documento in documentos)
-            {
-                prestadores.Add(JsonConvert.DeserializeObject<Prestador>(documento));
-            }            
-
             Log.Debug("PrestadorController.cs -> Get()");   
-            var mock = new List<Prestador>() {
-                new Prestador() {
-                    Id= Guid.NewGuid().ToString(), Nome = "Prestador Mock 1", Descricao = "Prestador dsc Mock 1", DtCadastro = DateTime.UtcNow
-                },
-                new Prestador() {
-                    Id= Guid.NewGuid().ToString(), Nome = "Prestador Mock 2", Descricao = "Prestador dsc Mock 2", DtCadastro = DateTime.UtcNow
-                }
-            };
-            return prestadores;
+            return documentos;
         }
 
         [HttpPut]
         public ActionResult Put(Prestador prestador)
         {
             Log.Debug("PrestadorController.cs -> Put()");
-            //if prestador is not valid
-            // return bad request
-            // dbService.Save (prestador)
-            // eventBus.Add(prestador)
-
+            _agenteFireBaseStorage.AdicionaDocumentoNaColecao<Prestador>(nameof(Prestador), prestador);
             return StatusCode(201);
-
         }
 
         [HttpPost]

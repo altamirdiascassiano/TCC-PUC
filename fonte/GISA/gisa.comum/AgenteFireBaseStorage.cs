@@ -20,23 +20,39 @@ namespace gisa.comum
             _firestoreDb = FirestoreDb.Create(projetoId);
         }
 
-        public async Task<List<string>> BuscaTodosDadosColecaoAsync(string nomeColecao)
+        public async Task<List<T>> BuscaTodosDocumentosColecaoAsync<T>(string nomeColecao)
         {           
             Query query = _firestoreDb.Collection(nomeColecao);
             QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
-            List<string> listaDocumentos= new List<string>();
+            List<T> listaDocumentos= new List<T>();
 
             foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
             {
                 if (documentSnapshot.Exists)
                 {
                     Dictionary<string, object> docDictionary = documentSnapshot.ToDictionary();
-                    //Ver como resolver pois está dando problema na conversão da data do firebase com o C#
-                    docDictionary["DtCadastro"] = DateTime.Now.ToString();
-                    listaDocumentos.Add(JsonConvert.SerializeObject(docDictionary));
+                    docDictionary.Add("Id", documentSnapshot.Id);
+                    docDictionary["DtCadastro"] = DateTime.Now.ToString(); //Tem resolver problema de conversão da data
+                    string json = JsonConvert.SerializeObject(docDictionary);                    
+                    T novoDoc = JsonConvert.DeserializeObject<T>(json);
+                    listaDocumentos.Add(novoDoc);
+
                 }
             }
             return listaDocumentos;
+        }
+
+        public async Task<bool> AdicionaDocumentoNaColecao<T>(string nomeColecao, T documento)
+        {
+            try
+            {
+                CollectionReference referenciaColecao = _firestoreDb.Collection(nomeColecao);
+                await referenciaColecao.AddAsync(documento);
+                return true;
+            }catch(Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
