@@ -28,6 +28,13 @@ namespace gisa.mic.backend.Controllers
             return documentos;
         }
 
+        /// <summary>
+        /// Busca o prestador pelo seu Id
+        /// </summary>
+        /// <param name="id">Valor do Identificado no FireBase</param>
+        /// <returns>Um único prestador</returns>
+        /// <response code="200">Busca efetuada com sucesso</response>
+        /// <response code="204">Fornecedor não identificado</response>
         [HttpGet]
         [Route("/{id}")]
         public async Task<Prestador> Get(string id)
