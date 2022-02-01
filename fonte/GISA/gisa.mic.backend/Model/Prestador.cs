@@ -42,6 +42,9 @@ namespace gisa.mic.backend.Model
         public string UF { get; set; }
 
         [FirestoreProperty]
+        public string Pais { get; set; }
+
+        [FirestoreProperty]
         public string Contato { get; set; }
 
         [FirestoreProperty]

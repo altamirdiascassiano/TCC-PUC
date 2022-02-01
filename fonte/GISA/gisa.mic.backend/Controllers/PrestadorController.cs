@@ -66,7 +66,7 @@ namespace gisa.mic.backend.Controllers
         /// Atualiza o prestador
         /// </summary>
         /// <param name="id">Identificador do prestador</param>
-        /// /// <param name="prestadorComAlteracao">Prestador que com os valores que será atualizado</param>
+        /// /// <param name="prestadorComAlteracao">Prestador com os valores que será atualizado</param>
         /// <returns>Um único prestador</returns>
         /// <response code="200">Atualização efetuada com sucesso</response>
         [HttpPut]

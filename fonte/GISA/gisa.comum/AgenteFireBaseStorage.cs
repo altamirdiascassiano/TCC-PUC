@@ -86,12 +86,12 @@ namespace gisa.comum
             }
         }
 
-        public async Task<bool> AtualizaDocumentoNaColecao<T>(string nomeColecao, string idDocumento, T EntidadeComAtualizacao)
+        public async Task<bool> AtualizaDocumentoNaColecao<T>(string nomeColecao, string idDocumento, T entidadeComAtualizacao)
         {
             try
             {
                 DocumentReference referenciaDocumento = _firestoreDb.Collection(nomeColecao).Document(idDocumento);
-                await referenciaDocumento.SetAsync(EntidadeComAtualizacao, SetOptions.Overwrite);
+                await referenciaDocumento.SetAsync(entidadeComAtualizacao, SetOptions.Overwrite);
                 return true;
             }
             catch (Exception ex)
