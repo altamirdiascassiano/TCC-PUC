@@ -16,7 +16,12 @@ namespace gisa.mic.backend.Controllers
         {
             _agenteFireBaseStorage = new AgenteFireBaseStorage();
         }
-
+        
+        /// <summary>
+        /// Busca todos os prestadores cadastrados
+        /// </summary>        
+        /// <returns>Todos prestadores</returns>
+        /// <response code="200">Busca efetuada com sucesso</response>
         [HttpGet]
         public async Task<IEnumerable<Prestador>> Get()
         {           
@@ -44,6 +49,11 @@ namespace gisa.mic.backend.Controllers
             return documento;
         }
 
+        /// <summary>
+        /// Salva novo prestador
+        /// </summary>
+        /// <param name="prestador">Recebe prestador que será gravado na base</param>
+        /// <response code="201">Gravação efetuada com sucesso</response>
         [HttpPost]
         public ActionResult Post(Prestador prestador)
         {
@@ -52,6 +62,13 @@ namespace gisa.mic.backend.Controllers
             return StatusCode(201);
         }
 
+        /// <summary>
+        /// Atualiza o prestador
+        /// </summary>
+        /// <param name="id">Identificador do prestador</param>
+        /// /// <param name="prestadorComAlteracao">Prestador que com os valores que será atualizado</param>
+        /// <returns>Um único prestador</returns>
+        /// <response code="200">Atualização efetuada com sucesso</response>
         [HttpPut]
         public ActionResult Put(string id,Prestador prestadorComAlteracao)
         {
@@ -61,6 +78,12 @@ namespace gisa.mic.backend.Controllers
             return StatusCode(200);
         }
 
+        /// <summary>
+        /// Remove o prestador
+        /// </summary>
+        /// <param name="id">Identificador do prestador</param>
+        /// <returns>Um único prestador</returns>
+        /// <response code="200">Atualização efetuada com sucesso</response>
         [HttpDelete]
         public ActionResult Delete(string id)
         {

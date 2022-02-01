@@ -48,9 +48,7 @@ namespace gisa.comum
                 if (documentSnapshot.Exists)
                 {
                     Dictionary<string, object> docDictionary = documentSnapshot.ToDictionary();
-                    docDictionary.Add("Id", documentSnapshot.Id);
-                    //object obj = docDictionary["DtCadastro"];
-                    //docDictionary["DtCadastro"] = DateTime.Now.ToString(); //Tem resolver problema de conversão da data                    
+                    docDictionary.Add("Id", documentSnapshot.Id);               
                     string json = JsonConvert.SerializeObject(docDictionary);
                     T novoDoc = JsonConvert.DeserializeObject<T>(json);
                     listaDocumentos.Add(novoDoc);
