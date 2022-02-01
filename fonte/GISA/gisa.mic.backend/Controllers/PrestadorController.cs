@@ -41,7 +41,7 @@ namespace gisa.mic.backend.Controllers
         /// <response code="200">Busca efetuada com sucesso</response>
         /// <response code="204">Fornecedor não identificado</response>
         [HttpGet]
-        [Route("/{id}")]
+        [Route("{id}")]
         public async Task<Prestador> Get(string id)
         {
             Log.Debug("Iniciando consulta a base do Firebase no id " + id);
