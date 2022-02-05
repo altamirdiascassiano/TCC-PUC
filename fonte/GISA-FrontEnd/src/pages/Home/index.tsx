@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Card, Button } from "framework-ui";
-import moment from "moment";
-import 'moment/locale/pt-br';
+import React, { useEffect } from "react";
+import { Card } from "framework-ui";
 
 const Home = () => {
   const pageStyle={    

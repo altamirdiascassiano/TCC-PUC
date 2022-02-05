@@ -1,13 +1,13 @@
 import React, { Suspense } from "react";
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch } from 'react-router-dom';
 import { Backdrop, CircularProgress } from "@material-ui/core";
 import { ThemeProvider, SnackbarProvider } from "framework-ui";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 const Routes = React.lazy(() => import("./routes"))
-const Login = React.lazy(() => import("./pages/Login"))
-const Unauthorized = React.lazy(() => import("./pages/Unauthorized"))
+// const Login = React.lazy(() => import("./pages/Login"))
+// const Unauthorized = React.lazy(() => import("./pages/Unauthorized"))
 
 const App = () => {
 
