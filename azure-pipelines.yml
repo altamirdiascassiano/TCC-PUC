@@ -15,10 +15,10 @@ steps:
     versionSpec: '10.x'
   displayName: 'Install Node.js'
 
-- script: |
-    cd TCC-PUC/fonte/GISA-FrontEnd/
-    npm install
-    npm run build
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'cd TCC-PUC/fonte/GISA-FrontEnd/; npm install; npm run build'
   displayName: 'npm install and build'
 
 - task: S3Upload@1
