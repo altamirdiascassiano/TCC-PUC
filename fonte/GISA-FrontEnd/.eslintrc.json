@@ -1,0 +1,70 @@
+{
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "plugin:react/recommended",
+        "airbnb",
+        "plugin:@typescript-eslint/recommended",        
+        "plugin:prettier/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "react",
+        "react-hooks",
+        "@typescript-eslint"
+        //"prettier"
+    ],
+    "rules": {
+        "eslint no-console": ["off", { "allow": ["warn", "error"] }],
+        "spaced-comment": ["off",
+          "warn",
+          "never",
+          {
+            "line": {
+              "markers": ["/"]
+            }
+          }
+        ],
+        "@typescript-eslint/no-var-requires": 0,          
+        "no-underscore-dangle": 0,
+        "@typescript-eslint/no-explicit-any": "off",  
+        "no-use-before-define": "off",
+        "@typescript-eslint/no-use-before-define": ["error"],
+        "prettier/prettier": "off",
+        "react-hooks/rules-of-hooks": "error",
+        "react-hooks/exhaustive-deps": "warn",
+        "react/jsx-filename-extension": [ 1, {"extensions": [".tsx"]} ],
+        "import/prefer-default-export": "off",
+        "@typescript-eslint/explicit-function-return-type": [
+          "off",
+          {
+            "allowExpressions": true
+          }
+        ],
+        "@typescript-eslint/explicit-module-boundary-types": [
+          "off"
+        ],
+        "import/extensions": [
+          "error",
+          "ignorePackages",
+          {
+            "ts": "never",
+            "tsx": "never"
+          }
+        ]
+      },
+      "settings": {
+        "import/resolver": {
+          "typescript": {}
+        }
+      }
+}
