@@ -1,0 +1,31 @@
+# Node.js with React
+# Build a Node.js project that uses React.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- script: |
+    cd TCC-PUC/fonte/GISA-FrontEnd/
+    npm install
+    npm run build
+  displayName: 'npm install and build'
+
+- task: S3Upload@1
+  inputs:
+    awsCredentials: 'AWS S3'
+    regionName: 'us-east-2'
+    bucketName: 'gisa-front-bucket-puc'
+    sourceFolder: '$(Build.SourcesDirectory)/TCC-PUC/fonte/GISA-FrontEnd/Build'
+    globExpressions: '**'
+    filesAcl: 'public-read'
