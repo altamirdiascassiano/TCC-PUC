@@ -30,11 +30,9 @@ namespace gisa.mic.backend.Controllers
         public async Task<IEnumerable<Associado>> Get()
         {            
             Log.Debug("Iniciando consulta a base do Firebase");
-            var documentos = await _agenteFireBaseStorage.BuscaTodosDocumentosColecaoAsync<Associado>(nameof(Associado));
-            Log.Debug("Consulta a base do Firebase finalizada");
-            var Associadoes = new List<Associado>();
-            Log.Debug("AssociadoController.cs -> Get()");
-            return documentos;
+            var associados = await _agenteFireBaseStorage.BuscaTodosDocumentosColecaoAsync<Associado>(nameof(Associado));
+            Log.Debug("Consulta a base do Firebase finalizada");            
+            return associados;
         }
 
         /// <summary>
@@ -49,8 +47,8 @@ namespace gisa.mic.backend.Controllers
         public async Task<Associado> Get(string id)
         {
             Log.Debug("Iniciando consulta a base do Firebase no id " + id);
-            var documento = await _agenteFireBaseStorage.BuscaDocumentoColecaoPorIdAsync<Associado>(nameof(Associado), id);
-            return documento;
+            var associado = await _agenteFireBaseStorage.BuscaDocumentoColecaoPorIdAsync<Associado>(nameof(Associado), id);
+            return associado;
         }
         
         /// <summary>
@@ -61,9 +59,11 @@ namespace gisa.mic.backend.Controllers
         [HttpPost]
         public async Task<ActionResult> Post(Associado Associado)
         {
-            Log.Debug("AssociadoController.cs -> Post()");
+            var jsonAssociado = JsonSerializer.Serialize(Associado);
+            Log.Debug("Gravando associado na base do Firebase = " + jsonAssociado);
             _agenteFireBaseStorage.AdicionaDocumentoNaColecao<Associado>(nameof(Associado), Associado);
-            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(Associado));
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
+            _agenteSQS.SalvaNoEventBus(jsonAssociado);
             return StatusCode(201);
         }
 
@@ -78,9 +78,11 @@ namespace gisa.mic.backend.Controllers
         [Route("{id}")]
         public async Task<ActionResult> Put(string id, Associado AssociadoComAlteracao)
         {
-            Log.Debug("AssociadoController.cs -> Put()");
-            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(AssociadoComAlteracao));
+            var jsonAssociado = JsonSerializer.Serialize(AssociadoComAlteracao);
+            Log.Debug("Atualizando associado com o Id= "+id+ " para o associado " + jsonAssociado);
             _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Associado>(nameof(Associado), id, AssociadoComAlteracao);
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
+            _agenteSQS.SalvaNoEventBus(jsonAssociado);            
             return StatusCode(200);
         }
 
@@ -94,9 +96,10 @@ namespace gisa.mic.backend.Controllers
         [Route("{id}")]
         public ActionResult Delete(string id)
         {
-            Log.Debug("AssociadoController.cs -> Delete()");
-            Log.Information("Iniciado deleção do fornecedor " + id);
+            Log.Information("Iniciado deleção do fornecedor no Firebase Storage" + id);
             _agenteFireBaseStorage.RemoveDocumentoNaColecao<Associado>(nameof(Associado), id);
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
+            _agenteSQS.SalvaNoEventBus(id);
             return StatusCode(200);
         }
     }

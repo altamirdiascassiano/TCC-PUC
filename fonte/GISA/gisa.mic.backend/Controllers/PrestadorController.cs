@@ -32,7 +32,6 @@ namespace gisa.mic.backend.Controllers
             var documentos= await _agenteFireBaseStorage.BuscaTodosDocumentosColecaoAsync<Prestador>(nameof(Prestador));
             Log.Debug("Consulta a base do Firebase finalizada");
             var prestadores = new List<Prestador>();
-            Log.Debug("PrestadorController.cs -> Get()");   
             return documentos;
         }
 
@@ -60,9 +59,11 @@ namespace gisa.mic.backend.Controllers
         [HttpPost]
         public ActionResult Post(Prestador prestador)
         {
-            Log.Debug("PrestadorController.cs -> Post()");
-            _agenteFireBaseStorage.AdicionaDocumentoNaColecao<Prestador>(nameof(Prestador), prestador);
-            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(prestador));
+            var jsonPrestador= JsonSerializer.Serialize(prestador);
+            Log.Debug("Gravando associado na base do Firebase = " + jsonPrestador);
+            _agenteFireBaseStorage.AdicionaDocumentoNaColecao<Prestador>(nameof(Associado), prestador);
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
+            _agenteSQS.SalvaNoEventBus(jsonPrestador);
             return StatusCode(201);
         }
 
@@ -77,9 +78,11 @@ namespace gisa.mic.backend.Controllers
         [Route("{id}")]
         public ActionResult Put(string id,Prestador prestadorComAlteracao)
         {
-            Log.Debug("PrestadorController.cs -> Put()");            
+            var jsonPrestador = JsonSerializer.Serialize(prestadorComAlteracao);
+            Log.Debug("Atualizando associado com o Id= " + id + " para o prestador " + jsonPrestador);
             _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Prestador>(nameof(Prestador), id, prestadorComAlteracao);
-            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(prestadorComAlteracao));
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
+            _agenteSQS.SalvaNoEventBus(jsonPrestador);
             return StatusCode(200);
         }
 
@@ -93,9 +96,9 @@ namespace gisa.mic.backend.Controllers
         [Route("{id}")]
         public ActionResult Delete(string id)
         {
-            Log.Debug("PrestadorController.cs -> Delete()");
-            Log.Information("Iniciado deleção do fornecedor " + id);
+            Log.Information("Iniciado deleção do prestador no Firebase Storage" + id);
             _agenteFireBaseStorage.RemoveDocumentoNaColecao<Prestador>(nameof(Prestador), id);
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
             _agenteSQS.SalvaNoEventBus(id);
             return StatusCode(200);
         }

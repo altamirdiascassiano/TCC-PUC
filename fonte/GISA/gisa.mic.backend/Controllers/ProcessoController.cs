@@ -28,11 +28,9 @@ namespace gisa.mic.backend.Controllers
         [HttpGet]
         public async Task<IEnumerable<Processo>> Get()
         {
-            Log.Debug("Iniciando consulta a base do Firebase");
+            Log.Debug("Iniciando consulta a base do Firebase storage");
             var documentos = await _agenteFireBaseStorage.BuscaTodosDocumentosColecaoAsync<Processo>(nameof(Processo));
-            Log.Debug("Consulta a base do Firebase finalizada");
-            var Processos = new List<Processo>();
-            Log.Debug("ProcessoController.cs -> Get()");
+            var Processos = new List<Processo>();            
             return documentos;
         }
 
@@ -49,6 +47,7 @@ namespace gisa.mic.backend.Controllers
         {
             Log.Debug("Iniciando consulta a base do Firebase no id " + id);
             var documento = await _agenteFireBaseStorage.BuscaDocumentoColecaoPorIdAsync<Processo>(nameof(Processo), id);
+            Log.Debug("Consulta a base do Firebase finalizada");
             return documento;
         }
 
@@ -60,9 +59,11 @@ namespace gisa.mic.backend.Controllers
         [HttpPost]
         public ActionResult Post(Processo Processo)
         {
-            Log.Debug("ProcessoController.cs -> Post()");
+            var jsonProcesso = JsonSerializer.Serialize(Processo);
+            Log.Debug("Gravando processo na base do Firebase = " + jsonProcesso);
             _agenteFireBaseStorage.AdicionaDocumentoNaColecao<Processo>(nameof(Processo), Processo);
-            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(Processo));
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
+            _agenteSQS.SalvaNoEventBus(jsonProcesso);
             return StatusCode(201);
         }
 
@@ -81,6 +82,14 @@ namespace gisa.mic.backend.Controllers
             _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Processo>(nameof(Processo), id, ProcessoComAlteracao);
             _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(ProcessoComAlteracao));
             return StatusCode(200);
+
+
+            var jsonProcesso = JsonSerializer.Serialize(ProcessoComAlteracao);
+            Log.Debug("Atualizando processo com o Id= " + id + " para o processo " + jsonProcesso);
+            _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Processo>(nameof(Processo), id, ProcessoComAlteracao);
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
+            _agenteSQS.SalvaNoEventBus(jsonProcesso);
+            return StatusCode(200);
         }
 
         /// <summary>
@@ -93,9 +102,9 @@ namespace gisa.mic.backend.Controllers
         [Route("{id}")]
         public ActionResult Delete(string id)
         {
-            Log.Debug("ProcessoController.cs -> Delete()");
-            Log.Information("Iniciado deleção do fornecedor " + id);
+            Log.Information("Iniciado deleção do processo no Firebase Storage" + id);
             _agenteFireBaseStorage.RemoveDocumentoNaColecao<Processo>(nameof(Processo), id);
+            Log.Debug("Comunicando com o Event Bus Amazon SQS");
             _agenteSQS.SalvaNoEventBus(id);
             return StatusCode(200);
         }
