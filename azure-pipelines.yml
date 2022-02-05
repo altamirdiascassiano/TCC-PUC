@@ -10,22 +10,22 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
-
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 'cd fonte/GISA-FrontEnd/; npm install; npm run build'
-  displayName: 'npm install and build'
-
-- task: S3Upload@1
-  inputs:
-    awsCredentials: 'AWS S3'
-    regionName: 'us-east-2'
-    bucketName: 'gisa-front-bucket-puc'
-    sourceFolder: '$(Build.SourcesDirectory)/fonte/GISA-FrontEnd/Build'
-    globExpressions: '**'
-    targetFolder: '/'
+  - task: NodeTool@0
+    inputs:
+      versionSpec: '10.x'
+    displayName: 'Install Node.js'
+  
+  - task: PowerShell@2
+    inputs:
+      targetType: 'inline'
+      script: 'cd fonte/GISA-FrontEnd/; npm install; npm run build'
+    displayName: 'npm install and build'
+  
+  - task: S3Upload@1
+    inputs:
+      awsCredentials: 'AWS S3'
+      regionName: 'us-east-2'
+      bucketName: 'gisa-front-bucket-puc'
+      sourceFolder: '$(Build.SourcesDirectory)/fonte/GISA-FrontEnd/Build'
+      globExpressions: '**'
+      targetFolder: '/'
