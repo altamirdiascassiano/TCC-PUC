@@ -3,6 +3,7 @@ using gisa.mic.backend.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace gisa.mic.backend.Controllers
@@ -12,9 +13,11 @@ namespace gisa.mic.backend.Controllers
     public class PrestadorController : Controller
     {
         AgenteFireBaseStorage _agenteFireBaseStorage;
+        AgenteSQS _agenteSQS;
         public PrestadorController()
         {
             _agenteFireBaseStorage = new AgenteFireBaseStorage();
+            _agenteSQS = new AgenteSQS();
         }
         
         /// <summary>
@@ -59,6 +62,7 @@ namespace gisa.mic.backend.Controllers
         {
             Log.Debug("PrestadorController.cs -> Post()");
             _agenteFireBaseStorage.AdicionaDocumentoNaColecao<Prestador>(nameof(Prestador), prestador);
+            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(prestador));
             return StatusCode(201);
         }
 
@@ -73,9 +77,9 @@ namespace gisa.mic.backend.Controllers
         [Route("{id}")]
         public ActionResult Put(string id,Prestador prestadorComAlteracao)
         {
-            Log.Debug("PrestadorController.cs -> Put()");
-            
+            Log.Debug("PrestadorController.cs -> Put()");            
             _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Prestador>(nameof(Prestador), id, prestadorComAlteracao);
+            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(prestadorComAlteracao));
             return StatusCode(200);
         }
 

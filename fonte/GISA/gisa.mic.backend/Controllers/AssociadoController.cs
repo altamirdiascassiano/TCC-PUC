@@ -3,6 +3,7 @@ using gisa.mic.backend.Model;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 using System.Collections.Generic;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace gisa.mic.backend.Controllers
@@ -12,9 +13,11 @@ namespace gisa.mic.backend.Controllers
     public class AssociadoController : Controller
     {
         AgenteFireBaseStorage _agenteFireBaseStorage;
+        AgenteSQS _agenteSQS;
         public AssociadoController()
         {
             _agenteFireBaseStorage = new AgenteFireBaseStorage();
+            _agenteSQS = new AgenteSQS();
         }
 
         /// <summary>
@@ -24,7 +27,7 @@ namespace gisa.mic.backend.Controllers
         /// <response code="200">Busca efetuada com sucesso</response>
         [HttpGet]
         public async Task<IEnumerable<Associado>> Get()
-        {
+        {            
             Log.Debug("Iniciando consulta a base do Firebase");
             var documentos = await _agenteFireBaseStorage.BuscaTodosDocumentosColecaoAsync<Associado>(nameof(Associado));
             Log.Debug("Consulta a base do Firebase finalizada");
@@ -55,10 +58,11 @@ namespace gisa.mic.backend.Controllers
         /// <param name="Associado">Recebe Associado que será gravado na base</param>
         /// <response code="201">Gravação efetuada com sucesso</response>
         [HttpPost]
-        public ActionResult Post(Associado Associado)
+        public async Task<ActionResult> Post(Associado Associado)
         {
             Log.Debug("AssociadoController.cs -> Post()");
             _agenteFireBaseStorage.AdicionaDocumentoNaColecao<Associado>(nameof(Associado), Associado);
+            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(Associado));
             return StatusCode(201);
         }
 
@@ -70,10 +74,10 @@ namespace gisa.mic.backend.Controllers
         /// <returns>Um único Associado</returns>
         /// <response code="200">Atualização efetuada com sucesso</response>
         [HttpPut]
-        public ActionResult Put(string id, Associado AssociadoComAlteracao)
+        public async Task<ActionResult> Put(string id, Associado AssociadoComAlteracao)
         {
             Log.Debug("AssociadoController.cs -> Put()");
-
+            await _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(AssociadoComAlteracao));
             _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Associado>(nameof(Associado), id, AssociadoComAlteracao);
             return StatusCode(200);
         }
