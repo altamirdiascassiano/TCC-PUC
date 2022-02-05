@@ -75,6 +75,7 @@ namespace gisa.mic.backend.Controllers
         /// <returns>Um único Associado</returns>
         /// <response code="200">Atualização efetuada com sucesso</response>
         [HttpPut]
+        [Route("{id}")]
         public async Task<ActionResult> Put(string id, Associado AssociadoComAlteracao)
         {
             Log.Debug("AssociadoController.cs -> Put()");
@@ -90,6 +91,7 @@ namespace gisa.mic.backend.Controllers
         /// <returns>Um único Associado</returns>
         /// <response code="200">Atualização efetuada com sucesso</response>
         [HttpDelete]
+        [Route("{id}")]
         public ActionResult Delete(string id)
         {
             Log.Debug("AssociadoController.cs -> Delete()");
