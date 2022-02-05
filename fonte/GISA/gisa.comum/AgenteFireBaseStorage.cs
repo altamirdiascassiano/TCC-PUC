@@ -1,4 +1,5 @@
 ﻿using Google.Cloud.Firestore;
+using Google.Cloud.Firestore.V1;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -7,15 +8,21 @@ using System.Threading.Tasks;
 namespace gisa.comum
 {
     public class AgenteFireBaseStorage
-    {
-        private string diretorio = "/app/bin/Debug/net5.0/gisa-c54d2-77dcdf90ba57.json";
-        private string projetoId;
+    {                
         private FirestoreDb _firestoreDb;
-        public AgenteFireBaseStorage()
+
+        public AgenteFireBaseStorage(string projetoId, string firebaseStorageJsonAuth)
         {
-            Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", diretorio);
-            projetoId = "gisa-c54d2";
-            _firestoreDb = FirestoreDb.Create(projetoId);
+            try
+            {
+                var builder = new FirestoreClientBuilder { JsonCredentials = firebaseStorageJsonAuth };
+                _firestoreDb = FirestoreDb.Create(projetoId, builder.Build());
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+                throw ex;
+            }
         }
 
         public async Task<T> BuscaDocumentoColecaoPorIdAsync<T>(string nomeColecao, string idDocumento)
@@ -50,7 +57,6 @@ namespace gisa.comum
                     string json = JsonConvert.SerializeObject(docDictionary);
                     T novoDoc = JsonConvert.DeserializeObject<T>(json);
                     listaDocumentos.Add(novoDoc);
-
                 }
             }
             return listaDocumentos;
