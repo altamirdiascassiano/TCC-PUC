@@ -74,6 +74,7 @@ namespace gisa.mic.backend.Controllers
         /// <returns>Um único Processo</returns>
         /// <response code="200">Atualização efetuada com sucesso</response>
         [HttpPut]
+        [Route("{id}")]
         public ActionResult Put(string id, Processo ProcessoComAlteracao)
         {
             Log.Debug("ProcessoController.cs -> Put()");
@@ -89,6 +90,7 @@ namespace gisa.mic.backend.Controllers
         /// <returns>Um único Processo</returns>
         /// <response code="200">Atualização efetuada com sucesso</response>
         [HttpDelete]
+        [Route("{id}")]
         public ActionResult Delete(string id)
         {
             Log.Debug("ProcessoController.cs -> Delete()");
