@@ -5,7 +5,7 @@
 import React from "react";
 import { MenuDrawer } from "framework-ui";
 import { useHistory } from "react-router-dom";
-import { Home as HomeIcon, Person } from "@material-ui/icons";
+import { Home as HomeIcon, Person, Assignment } from "@material-ui/icons";
 import MedicationIcon from '@mui/icons-material/Medication';
 
 type Props = {
@@ -24,7 +24,8 @@ const Menu: React.FC<Props> = ({ open, setOpen }) => {
   const items = [
     { title: "Home", path: "/home", icon: HomeIcon, action: "" },
     { title: "Prestador", path: "/prestadores", icon: MedicationIcon, action: "" },
-    { title: "Associado", path: "/associado", icon: Person, action: "" },
+    { title: "Associado", path: "/associados", icon: Person, action: "" },
+    { title: "Processo", path: "/processos", icon: Assignment, action: "" }
   ]
 
   return (

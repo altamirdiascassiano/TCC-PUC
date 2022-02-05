@@ -1,5 +1,4 @@
 import React from "react";
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
 import Logo from '../assets/ico2.png'
 import  AppBar from "./AppBar";
 import Menu from "./Menu";

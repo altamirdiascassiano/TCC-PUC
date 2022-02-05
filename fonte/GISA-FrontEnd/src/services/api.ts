@@ -1,4 +1,4 @@
-import { BASE_URL, API_TOKEN } from "./base";
+import { BASE_URL } from "./base";
 
 export default async ( url: string,  method = 'GET',  body?: any,  headers = {}): Promise<any> => {
   const controller = new AbortController();

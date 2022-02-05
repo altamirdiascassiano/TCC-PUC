@@ -24,7 +24,7 @@
         //"prettier"
     ],
     "rules": {
-        "eslint no-console": ["off", { "allow": ["warn", "error"] }],
+        "eslint no-console": ["off", { "allow": ["error"] }],
         "spaced-comment": ["off",
           "warn",
           "never",
