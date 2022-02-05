@@ -14,10 +14,10 @@ namespace gisa.mic.backend.Controllers
     {
         AgenteFireBaseStorage _agenteFireBaseStorage;
         AgenteSQS _agenteSQS;
-        public PrestadorController()
+        public PrestadorController(AgenteSQS agenteSQS, AgenteFireBaseStorage agenteFireBaseStorage)
         {
-            _agenteFireBaseStorage = new AgenteFireBaseStorage();
-            _agenteSQS = new AgenteSQS();
+            _agenteFireBaseStorage = agenteFireBaseStorage;
+            _agenteSQS = agenteSQS;
         }
         
         /// <summary>
@@ -95,7 +95,8 @@ namespace gisa.mic.backend.Controllers
         {
             Log.Debug("PrestadorController.cs -> Delete()");
             Log.Information("Iniciado deleção do fornecedor " + id);
-            _agenteFireBaseStorage.RemoveDocumentoNaColecao<Prestador>(nameof(Prestador), id);            
+            _agenteFireBaseStorage.RemoveDocumentoNaColecao<Prestador>(nameof(Prestador), id);
+            _agenteSQS.SalvaNoEventBus(id);
             return StatusCode(200);
         }
     }

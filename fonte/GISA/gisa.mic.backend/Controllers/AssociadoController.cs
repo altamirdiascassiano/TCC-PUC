@@ -14,10 +14,11 @@ namespace gisa.mic.backend.Controllers
     {
         AgenteFireBaseStorage _agenteFireBaseStorage;
         AgenteSQS _agenteSQS;
-        public AssociadoController()
+
+        public AssociadoController(AgenteSQS agenteSQS, AgenteFireBaseStorage agenteFireBaseStorage)
         {
-            _agenteFireBaseStorage = new AgenteFireBaseStorage();
-            _agenteSQS = new AgenteSQS();
+            _agenteFireBaseStorage = agenteFireBaseStorage;
+            _agenteSQS = agenteSQS;
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ namespace gisa.mic.backend.Controllers
         public async Task<ActionResult> Put(string id, Associado AssociadoComAlteracao)
         {
             Log.Debug("AssociadoController.cs -> Put()");
-            await _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(AssociadoComAlteracao));
+            _agenteSQS.SalvaNoEventBus(JsonSerializer.Serialize(AssociadoComAlteracao));
             _agenteFireBaseStorage.AtualizaDocumentoNaColecao<Associado>(nameof(Associado), id, AssociadoComAlteracao);
             return StatusCode(200);
         }

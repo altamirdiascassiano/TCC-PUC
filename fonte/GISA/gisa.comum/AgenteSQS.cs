@@ -7,15 +7,25 @@ using System.Threading.Tasks;
 namespace gisa.comum
 {
     public class AgenteSQS
-    {       
+    {
+        string _idConnection;
+        string _secretKey;
+        string _urlQueue;
+        public AgenteSQS(string idConnection, string secretKey,string urlQueue)
+        {
+            this._idConnection = idConnection;
+            this._secretKey = secretKey;
+            this._urlQueue = urlQueue;
+        }
+
         public async Task SalvaNoEventBus( string jsonObject)
         {
             try
             {
-            var awsCreds = new BasicAWSCredentials("id", "secret-key");
+            var awsCreds = new BasicAWSCredentials(_idConnection, _secretKey);
             var amazonSQSClient = new AmazonSQSClient(awsCreds, Amazon.RegionEndpoint.USEast2);
             var sendRequest = new SendMessageRequest();
-            sendRequest.QueueUrl = @"https://sqs.us-east-2.amazonaws.com/140195293025/gisa_mic";
+            sendRequest.QueueUrl = _urlQueue;
             sendRequest.MessageBody = jsonObject;
             var sendMessageResponse = amazonSQSClient.SendMessageAsync(sendRequest).Result;            
             }catch(Exception ex)

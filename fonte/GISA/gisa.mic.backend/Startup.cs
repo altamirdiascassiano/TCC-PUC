@@ -15,10 +15,13 @@ namespace gisa.mic.backend
 {
     public class Startup
     {
+        AgenteSQS _agenteSQS;
+        AgenteFireBaseStorage _agenteFireBaseStorage;
         public Startup(IConfiguration configuration)
         {           
             Log.Logger = new AgenteLog().CriaAgente(configuration);
             Log.Debug("Startup.cs -> Startup()");
+
         }
 
         public IConfiguration Configuration { get; }
@@ -38,9 +41,11 @@ namespace gisa.mic.backend
             });
 
             services.AddCors();
-
-            Log.Debug("Startup.cs -> ConfigurationService()");
-
+            _agenteSQS = new AgenteSQS("", "", @"");
+            _agenteFireBaseStorage = new AgenteFireBaseStorage();
+            services.AddSingleton(_agenteSQS);
+            services.AddSingleton(_agenteFireBaseStorage);
+            Log.Debug("Startup.cs -> ConfigurationService()");                   
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
