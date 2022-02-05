@@ -26,6 +26,4 @@ steps:
     awsCredentials: 'AWS S3'
     regionName: 'us-east-2'
     bucketName: 'gisa-front-bucket-puc'
-    sourceFolder: '$(Build.SourcesDirectory)/TCC-PUC/fonte/GISA-FrontEnd/Build'
-    globExpressions: '**'
-    filesAcl: 'public-read'
+    sourceFolder: '$(Build.SourcesDirectory)/TCC-PUC/fonte/GISA-FrontEnd/Build'    
