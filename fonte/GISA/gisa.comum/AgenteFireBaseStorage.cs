@@ -8,7 +8,7 @@ namespace gisa.comum
 {
     public class AgenteFireBaseStorage
     {
-        private string diretorio = "/app/bin/Debug/net5.0/gisa-c54d2-77dcdf90ba57.json";
+        private string diretorio = "gisa-c54d2-77dcdf90ba57.json";
         private string projetoId;
         private FirestoreDb _firestoreDb;
         public AgenteFireBaseStorage()
