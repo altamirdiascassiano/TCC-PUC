@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace gisa.comum
 {
     public class AgenteFireBaseStorage
-    {                
+    {
         private FirestoreDb _firestoreDb;
 
         public AgenteFireBaseStorage(string projetoId, string firebaseStorageJsonAuth)
@@ -20,46 +20,59 @@ namespace gisa.comum
             }
             catch (Exception ex)
             {
-                var msg = ex.Message;
                 throw ex;
             }
         }
 
         public async Task<T> BuscaDocumentoColecaoPorIdAsync<T>(string nomeColecao, string idDocumento)
-        {          
-            DocumentReference documentReference = _firestoreDb.Collection(nomeColecao).Document(idDocumento);
-            DocumentSnapshot documentSnapshot = await documentReference.GetSnapshotAsync();
-
-            if (documentSnapshot.Exists)
+        {
+            try
             {
-                Dictionary<string, object> docRecuperado = documentSnapshot.ToDictionary();
-                docRecuperado.Add("Id", documentSnapshot.Id);
-                string json = JsonConvert.SerializeObject(docRecuperado);
-                T novoDoc = JsonConvert.DeserializeObject<T>(json);
-                return novoDoc;
-            }
+                DocumentReference documentReference = _firestoreDb.Collection(nomeColecao).Document(idDocumento);
+                DocumentSnapshot documentSnapshot = await documentReference.GetSnapshotAsync();
 
-            return default(T);
+                if (documentSnapshot.Exists)
+                {
+                    Dictionary<string, object> docRecuperado = documentSnapshot.ToDictionary();
+                    docRecuperado.Add("Id", documentSnapshot.Id);
+                    string json = JsonConvert.SerializeObject(docRecuperado);
+                    T novoDoc = JsonConvert.DeserializeObject<T>(json);
+                    return novoDoc;
+                }
+
+                return default(T);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<List<T>> BuscaTodosDocumentosColecaoAsync<T>(string nomeColecao)
         {
-            Query query = _firestoreDb.Collection(nomeColecao);
-            QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
-            List<T> listaDocumentos = new List<T>();
-
-            foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
+            try
             {
-                if (documentSnapshot.Exists)
+                Query query = _firestoreDb.Collection(nomeColecao);
+                QuerySnapshot querySnapshot = await query.GetSnapshotAsync();
+                List<T> listaDocumentos = new List<T>();
+
+                foreach (DocumentSnapshot documentSnapshot in querySnapshot.Documents)
                 {
-                    Dictionary<string, object> docDictionary = documentSnapshot.ToDictionary();
-                    docDictionary.Add("Id", documentSnapshot.Id);               
-                    string json = JsonConvert.SerializeObject(docDictionary);
-                    T novoDoc = JsonConvert.DeserializeObject<T>(json);
-                    listaDocumentos.Add(novoDoc);
+                    if (documentSnapshot.Exists)
+                    {
+                        Dictionary<string, object> docDictionary = documentSnapshot.ToDictionary();
+                        docDictionary.Add("Id", documentSnapshot.Id);
+                        string json = JsonConvert.SerializeObject(docDictionary);
+                        T novoDoc = JsonConvert.DeserializeObject<T>(json);
+                        listaDocumentos.Add(novoDoc);
+                    }
                 }
+                return listaDocumentos;
             }
-            return listaDocumentos;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         public async Task<bool> AdicionaDocumentoNaColecao<T>(string nomeColecao, T documento)

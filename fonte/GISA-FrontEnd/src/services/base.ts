@@ -1,4 +1,4 @@
-export const BASE_URL = "https://localhost:44372"
+export const BASE_URL = "https://localhost:49155"
 export const API_TOKEN = ""
 export const ApiAssociado = "/Associado"
 export const ApiPrestador = "/Prestador"
