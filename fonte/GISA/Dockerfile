@@ -1,4 +1,4 @@
-FROM docker-hmg.registry.energisa.corp/dotnet/aspnet:5.0
+FROM mcr.microsoft.com/dotnet/aspnet:5.0
 
 ENV TZ=America/Sao_Paulo
 ENV DISABLE_KERNEL_MEMORY_ACCOUNTING=true
