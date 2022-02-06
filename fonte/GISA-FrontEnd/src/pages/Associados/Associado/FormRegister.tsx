@@ -116,7 +116,7 @@ const FormRegister = ({ values, handleChange }: any) => {
           InputLabelProps={{
             shrink: true,
           }}
-          type="number"
+          
         />
       </Grid>   
 
