@@ -60,7 +60,7 @@ const AddPrestador = () => {
     
     let result;
 
-    if (values.id === "" ) 
+    if (values.id === undefined || values.id === "" ) 
     {
       result = await api(`${ApiPrestador}`, 'POST', JSON.stringify(values));
     }  

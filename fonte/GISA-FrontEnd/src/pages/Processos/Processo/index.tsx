@@ -60,7 +60,7 @@ const AddProcesso = () => {
     
     let result;
 
-    if (values.id === "" ) 
+    if (values.id === undefined || values.id === "") 
     {
       result = await api(`${ApiProcesso}`, 'POST', JSON.stringify(values));
     }  

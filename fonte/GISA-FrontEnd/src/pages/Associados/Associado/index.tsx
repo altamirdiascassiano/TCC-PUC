@@ -59,7 +59,7 @@ const AddAssociado = () => {
     
     let result;
 
-    if (values.id === "" ) 
+    if (values.id === undefined || values.id === "" ) 
     {
       result = await api(`${ApiAssociado}`, 'POST', JSON.stringify(values));
     }  
